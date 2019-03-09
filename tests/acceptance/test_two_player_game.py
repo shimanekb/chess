@@ -13,13 +13,56 @@ def feed_input(monkeypatch):
     return _feed_input
 
 
-def test_movement(capsys):
-    game_controller.play_game()
-    board = capsys.readouterr()
-    print('LOOK\n')
-    print(board)
+@pytest.mark.timeout(1)
+def test_movement(capsys, feed_input):
+    # Given
+    expected_first_board = '  ---------------------------------------------\n' \
+                           '8 | BR  | BK  | BB  | BQ  | BKi| BB | BK | BR |\n'\
+                           '  ---------------------------------------------\n' \
+                           '7 | BP  | BP  | BP  | BP  | BP | BP | BP | BP |\n'\
+                           '  ---------------------------------------------\n' \
+                           '6 |     |     |     |     |    |    |    |    |\n'\
+                           '  ---------------------------------------------\n' \
+                           '5 |     |     |     |     |    |    |    |    |\n'\
+                           '  ---------------------------------------------\n'\
+                           '4 |     |     |     |     |    |    |    |    |\n'\
+                           '  ---------------------------------------------\n'\
+                           '3 |     |     |     |     |    |    |    |    |\n'\
+                           '  ---------------------------------------------\n'\
+                           '2 | WP  | WP  | WP  | WP  | WP | WP | WP | WP |\n'\
+                           '  ---------------------------------------------\n'\
+                           '1 | WR  | WK  | WB  | WQ  | WKi| WB | WK | WR |\n'\
+                           '  ---------------------------------------------\n'\
+                           '     a     b     c     d    e     f    g    h'
+    expected_second_board = '  ---------------------------------------------\n'\
+                            '8 | BR  | BK  | BB  | BQ  | BKi| BB | BK | BR |\n'\
+                            '  ---------------------------------------------\n'\
+                            '7 | BP  | BP  | BP  | BP  | BP | BP | BP | BP |\n'\
+                            '  ---------------------------------------------\n'\
+                            '6 |     |     |     |     |    |    |    |    |\n'\
+                            '  ---------------------------------------------\n'\
+                            '5 |     |     |     |     |    |    |    |    |\n'\
+                            '  ---------------------------------------------\n'\
+                            '4 |     |     |     |     |    |    |    |    |\n'\
+                            '  ---------------------------------------------\n'\
+                            '3 |     | WP  |     |     |    |    |    |    |\n'\
+                            '  ---------------------------------------------\n'\
+                            '2 | WP  |     | WP  | WP  | WP | WP | WP | WP |\n'\
+                            '  ---------------------------------------------\n'\
+                            '1 | WR  | WK  | WB  | WQ  | WKi| WB | WK | WR |\n'\
+                            '  ---------------------------------------------\n'\
+                            '     a     b     c     d    e     f    g    h'
+    feed_input('b2 b3')
+    feed_input('Q')
 
-    assert False
+    # When
+    game_controller.play_game()
+
+    # Then
+    board = capsys.readouterr()
+
+    assert expected_first_board in board.out
+    assert expected_second_board in board.out
 
 
 def test_movement_retry_bad_input_not_rank():
@@ -40,5 +83,10 @@ def test_capture():
 
 @pytest.mark.timeout(1)
 def test_quit(feed_input):
+    # Given
     feed_input('Q')
+
+    # When
     game_controller.play_game()
+
+    # Then Pytest checks and timeouts
