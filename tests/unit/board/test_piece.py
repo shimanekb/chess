@@ -143,3 +143,59 @@ def test_str_bishop_black(mocker):
 
     # Then
     assert actual_symbol == expected_symbol
+
+
+def test_str_queen_white(mocker):
+    # Given
+    expected_symbol = 'WQ'
+    position = mocker.MagicMock(rank='b', file='2', piece=None,
+                                spec=board.Position)
+    chess_piece = piece.Queen(position, piece.Color.WHITE)
+
+    # When
+    actual_symbol = str(chess_piece)
+
+    # Then
+    assert actual_symbol == expected_symbol
+
+
+def test_str_queen_black(mocker):
+    # Given
+    expected_symbol = 'BQ'
+    position = mocker.MagicMock(rank='b', file='2', piece=None,
+                                spec=board.Position)
+    chess_piece = piece.Queen(position, piece.Color.BLACK)
+
+    # When
+    actual_symbol = str(chess_piece)
+
+    # Then
+    assert actual_symbol == expected_symbol
+
+
+def test_str_king_white(mocker):
+    # Given
+    expected_symbol = 'WKi'
+    position = mocker.MagicMock(rank='b', file='2', piece=None,
+                                spec=board.Position)
+    chess_piece = piece.King(position, piece.Color.WHITE)
+
+    # When
+    actual_symbol = str(chess_piece)
+
+    # Then
+    assert actual_symbol == expected_symbol
+
+
+def test_str_king_black(mocker):
+    # Given
+    expected_symbol = 'BKi'
+    position = mocker.MagicMock(rank='b', file='2', piece=None,
+                                spec=board.Position)
+    chess_piece = piece.King(position, piece.Color.BLACK)
+
+    # When
+    actual_symbol = str(chess_piece)
+
+    # Then
+    assert actual_symbol == expected_symbol
