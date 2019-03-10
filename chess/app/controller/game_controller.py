@@ -75,4 +75,3 @@ def capture_piece(position):
     None
     """
     raise NotImplementedError()
-

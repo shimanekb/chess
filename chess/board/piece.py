@@ -72,3 +72,17 @@ class Knight(Piece):
     """
     def __init__(self, position, color, symbol='K'):
         super().__init__(position, color, symbol=symbol)
+
+
+class Bishop(Piece):
+    """Bishop chess piece.
+
+    Attributes
+    ----------
+    position : chess.board.Position
+        Position of chess piece.
+    color : chess.piece.Color
+        Color of chess piece, which can be White or Black.
+    """
+    def __init__(self, position, color, symbol='B'):
+        super().__init__(position, color, symbol=symbol)
