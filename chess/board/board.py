@@ -62,7 +62,8 @@ class Board:
         piece = self.get_piece(position_from)
 
         if piece is None:
-            raise IllegalMoveError('No piece to move at %s' % str(position_from))
+            raise IllegalMoveError('No piece to move at %s'
+                                   % str(position_from))
         self._remove_piece(position_from)
         self._place_piece(position_to, piece)
 

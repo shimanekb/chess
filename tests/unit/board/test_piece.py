@@ -1,7 +1,6 @@
 """
 Unit tests for piece module.
 """
-from chess.board import board
 from chess.board import piece
 
 

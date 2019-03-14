@@ -106,3 +106,7 @@ def test_move_piece_move_piece_is_moved():
     assert board.get_piece(pos_from) is None
     assert board.get_piece(pos_to) is not None
     assert board.get_piece(pos_to).symbol == 'WP'
+
+
+def test_move_piece_piece_captured_move_to_occupied_position():
+    assert False
