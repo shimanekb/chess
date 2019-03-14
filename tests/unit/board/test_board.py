@@ -91,3 +91,18 @@ def test_init_default_black_board_setup():
         pos = Position(square)
         black_pawn = board.get_piece(pos)
         assert black_pawn.symbol == 'BP'
+
+
+def test_move_piece_move_piece_is_moved():
+    # Given
+    pos_from = Position('a2')
+    pos_to = Position('a3')
+
+    # When
+    board = Board()
+    board.move_piece(pos_from, pos_to)
+
+    # Then
+    assert board.get_piece(pos_from) is None
+    assert board.get_piece(pos_to) is not None
+    assert board.get_piece(pos_to).symbol == 'WP'

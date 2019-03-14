@@ -2,7 +2,7 @@
 Module for chess board related classes and functions.
 """
 import re
-from chess.board import piece
+from chess.board import piece as chess_piece
 
 
 class Board:
@@ -17,35 +17,67 @@ class Board:
                 self._positions[square] = Position(square)
 
         # Setup white
-        self._setup_major_pieces(1, piece.Color.WHITE)
-        self._setup_minor_pieces(2, piece.Color.WHITE)
+        self._setup_major_pieces(1, chess_piece.Color.WHITE)
+        self._setup_minor_pieces(2, chess_piece.Color.WHITE)
 
         # Setup black
-        self._setup_major_pieces(8, piece.Color.BLACK)
-        self._setup_minor_pieces(7, piece.Color.BLACK)
+        self._setup_major_pieces(8, chess_piece.Color.BLACK)
+        self._setup_minor_pieces(7, chess_piece.Color.BLACK)
 
     def _setup_major_pieces(self, rank, color):
-        self._positions['a%s' % rank].piece = piece.Rook(color)
-        self._positions['b%s' % rank].piece = piece.Knight(color)
-        self._positions['c%s' % rank].piece = piece.Bishop(color)
-        self._positions['d%s' % rank].piece = piece.Queen(color)
-        self._positions['e%s' % rank].piece = piece.King(color)
-        self._positions['f%s' % rank].piece = piece.Bishop(color)
-        self._positions['g%s' % rank].piece = piece.Knight(color)
-        self._positions['h%s' % rank].piece = piece.Rook(color)
+        self._positions['a%s' % rank].chess_piece = chess_piece.Rook(color)
+        self._positions['b%s' % rank].chess_piece = chess_piece.Knight(color)
+        self._positions['c%s' % rank].chess_piece = chess_piece.Bishop(color)
+        self._positions['d%s' % rank].chess_piece = chess_piece.Queen(color)
+        self._positions['e%s' % rank].chess_piece = chess_piece.King(color)
+        self._positions['f%s' % rank].chess_piece = chess_piece.Bishop(color)
+        self._positions['g%s' % rank].chess_piece = chess_piece.Knight(color)
+        self._positions['h%s' % rank].chess_piece = chess_piece.Rook(color)
 
     def _setup_minor_pieces(self, rank, color):
         for file in range(ord('a'), ord('h') + 1):
             square = '%s%s' % (chr(file), rank)
-            self._positions[square].piece = piece.Pawn(color)
+            self._positions[square].piece = chess_piece.Pawn(color)
 
-    def get_piece(self, position):
-        """
-        Gets chess piece at given position.
+    def move_piece(self, position_from, position_to):
+        """Moves piece from one position to another. Capturing a piece occupied
+        by the position to move to.
 
         Parameters
         ----------
-        position : Position
+        position_from : chess.board.Position
+            Position to move piece from.
+        position_to : chess.board.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        chess.board.board.IllegalMoveError
+            Raised when piece move is illegal.
+        """
+        piece = self.get_piece(position_from)
+
+        if piece is None:
+            raise IllegalMoveError('No piece to move at %s' % str(position_from))
+        self._remove_piece(position_from)
+        self._place_piece(position_to, piece)
+
+    def _place_piece(self, position, piece):
+        self._positions[str(position)].piece = piece
+
+    def _remove_piece(self, position):
+        self._positions[str(position)].piece = None
+
+    def get_piece(self, position):
+        """Gets chess piece at given position.
+
+        Parameters
+        ----------
+        position: Position
             Position to get chess piece from.
 
         Returns
@@ -57,8 +89,7 @@ class Board:
 
 
 class Position:
-    """
-    Represents a chess position on the board.
+    """Represents a chess position on the board.
 
     Parameters
     ----------
@@ -100,3 +131,13 @@ class Position:
 
     def __str__(self):
         return '%s%s' % (self.file, self.rank)
+
+
+class ChessError(Exception):
+    """Base class for chess exceptions."""
+    pass
+
+
+class IllegalMoveError(ChessError):
+    """Illegal chess move was attempted."""
+    pass
