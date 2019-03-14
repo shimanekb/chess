@@ -16,20 +16,17 @@ class Piece:
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     symbol : str
         Display symbol of chess piece. Defaults to NA.
     """
-    def __init__(self, position, color, symbol='NA'):
-        self.position = position
-        self.symbol = symbol
+    def __init__(self, color, symbol='NA'):
+        self.symbol = color.value + symbol
         self.color = color
 
     def __str__(self):
-        return self.color.value + self.symbol
+        return self.symbol
 
 
 class Pawn(Piece):
@@ -37,13 +34,11 @@ class Pawn(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='P'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='P'):
+        super().__init__(color, symbol=symbol)
 
 
 class Rook(Piece):
@@ -51,13 +46,11 @@ class Rook(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='R'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='R'):
+        super().__init__(color, symbol=symbol)
 
 
 class Knight(Piece):
@@ -65,13 +58,11 @@ class Knight(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='K'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='K'):
+        super().__init__(color, symbol=symbol)
 
 
 class Bishop(Piece):
@@ -79,13 +70,11 @@ class Bishop(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='B'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='B'):
+        super().__init__(color, symbol=symbol)
 
 
 class Queen(Piece):
@@ -93,13 +82,11 @@ class Queen(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='Q'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='Q'):
+        super().__init__(color, symbol=symbol)
 
 
 class King(Piece):
@@ -107,10 +94,8 @@ class King(Piece):
 
     Attributes
     ----------
-    position : chess.board.Position
-        Position of chess piece.
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
     """
-    def __init__(self, position, color, symbol='Ki'):
-        super().__init__(position, color, symbol=symbol)
+    def __init__(self, color, symbol='Ki'):
+        super().__init__(color, symbol=symbol)
