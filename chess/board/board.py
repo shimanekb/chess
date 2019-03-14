@@ -15,23 +15,44 @@ class Board:
             for rank in range(1, 9):
                 square = '%s%s' % (chr(file), rank)
                 self._positions[square] = Position(square)
-        self._setup_white()
 
-    def _setup_white(self):
-        self._positions['a1'].piece = piece.Rook(piece.Color.WHITE)
-        self._positions['b1'].piece = piece.Knight(piece.Color.WHITE)
-        self._positions['c1'].piece = piece.Bishop(piece.Color.WHITE)
-        self._positions['d1'].piece = piece.Queen(piece.Color.WHITE)
-        self._positions['e1'].piece = piece.King(piece.Color.WHITE)
-        self._positions['f1'].piece = piece.Bishop(piece.Color.WHITE)
-        self._positions['g1'].piece = piece.Knight(piece.Color.WHITE)
-        self._positions['h1'].piece = piece.Rook(piece.Color.WHITE)
+        # Setup white
+        self._setup_major_pieces(1, piece.Color.WHITE)
+        self._setup_minor_pieces(2, piece.Color.WHITE)
 
+        # Setup black
+        self._setup_major_pieces(8, piece.Color.BLACK)
+        self._setup_minor_pieces(7, piece.Color.BLACK)
+
+    def _setup_major_pieces(self, rank, color):
+        self._positions['a%s' % rank].piece = piece.Rook(color)
+        self._positions['b%s' % rank].piece = piece.Knight(color)
+        self._positions['c%s' % rank].piece = piece.Bishop(color)
+        self._positions['d%s' % rank].piece = piece.Queen(color)
+        self._positions['e%s' % rank].piece = piece.King(color)
+        self._positions['f%s' % rank].piece = piece.Bishop(color)
+        self._positions['g%s' % rank].piece = piece.Knight(color)
+        self._positions['h%s' % rank].piece = piece.Rook(color)
+
+    def _setup_minor_pieces(self, rank, color):
         for file in range(ord('a'), ord('h') + 1):
-            square = '%s2' % chr(file)
-            self._positions[square].piece = piece.Pawn(piece.Color.WHITE)
+            square = '%s%s' % (chr(file), rank)
+            self._positions[square].piece = piece.Pawn(color)
 
     def get_piece(self, position):
+        """
+        Gets chess piece at given position.
+
+        Parameters
+        ----------
+        position : Position
+            Position to get chess piece from.
+
+        Returns
+        -------
+        chess.board.piece.Piece
+            Chess piece if position is occupied, otherwise None.
+        """
         return self._positions[str(position)].piece
 
 
