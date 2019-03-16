@@ -1,6 +1,8 @@
 """
 Module for two player game of chess.
 """
+from chess.board import Board
+from chess.app.view import board_view
 
 
 QUIT = 'Q'
@@ -13,22 +15,28 @@ def play_game():
     -------
     None
     """
+    board = Board()
     while True:
-        display_board()
+        display_board(board)
         user_input = ask_move()
 
         if user_input.upper() == QUIT:
             break
 
 
-def display_board():
+def display_board(board):
     """Displays current chess board state
+
+    Parameters
+    ----------
+    board : chess.board.Board
+        Board to display.
 
     Returns
     -------
     None
     """
-    # does nothing
+    return board_view.display(board)
 
 
 def ask_move():
@@ -39,7 +47,7 @@ def ask_move():
     str
         User movement input.
     """
-    user_input = input('Please make a move (example a5 a6) or quit (Q):')
+    user_input = input('Make a move(ex. b2 b3) or Q to quit:')
     return user_input
 
 
