@@ -120,7 +120,8 @@ def test_move_piece_piece_captured_move_to_occupied_position():
     assert board.get_piece(Position('b7')) is not None
     assert board.get_piece(Position('b7')).symbol == 'BP'
 
-    pos_from_to = [('a2', 'a3'), ('a3', 'a4'), ('a4', 'a5'), ('a5', 'a6'), ('a6', 'b7')]
+    pos_from_to = [('a2', 'a3'), ('a3', 'a4'), ('a4', 'a5'),
+                   ('a5', 'a6'), ('a6', 'b7')]
 
     # When
     for pos_from, pos_to in pos_from_to:
