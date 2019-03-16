@@ -18,22 +18,27 @@ def play_game():
     None
     """
     board = Board()
-    while True:
-        try:
-            print('')
-            display_board(board)
-            print('')
-            user_input = ask_move()
+    quit_game = False
+    while not quit_game:
+        print('')
+        display_board(board)
+        print('')
 
-            if user_input.upper() == QUIT:
+        while True:
+            try:
+                user_input = ask_move()
+
+                if user_input.upper() == QUIT:
+                    quit_game = True
+                    break
+
+                position_from, position_to = _parse_positions(user_input)
+                board.move_piece(position_from, position_to)
                 break
-
-            position_from, position_to = _parse_positions(user_input)
-            board.move_piece(position_from, position_to)
-        except ValueError as err:
-            print(err)
-        except IllegalMoveError as err:
-            print(err)
+            except ValueError as err:
+                print(err)
+            except IllegalMoveError as err:
+                print(err)
 
 
 def _parse_positions(user_input):
