@@ -2,7 +2,7 @@
 Module for chess board related classes and functions.
 """
 import re
-from chess.board import piece as chess_piece
+from chess import piece as chess_piece
 
 
 class Board:
@@ -25,14 +25,14 @@ class Board:
         self._setup_minor_pieces(7, chess_piece.Color.BLACK)
 
     def _setup_major_pieces(self, rank, color):
-        self._positions['a%s' % rank].chess_piece = chess_piece.Rook(color)
-        self._positions['b%s' % rank].chess_piece = chess_piece.Knight(color)
-        self._positions['c%s' % rank].chess_piece = chess_piece.Bishop(color)
-        self._positions['d%s' % rank].chess_piece = chess_piece.Queen(color)
-        self._positions['e%s' % rank].chess_piece = chess_piece.King(color)
-        self._positions['f%s' % rank].chess_piece = chess_piece.Bishop(color)
-        self._positions['g%s' % rank].chess_piece = chess_piece.Knight(color)
-        self._positions['h%s' % rank].chess_piece = chess_piece.Rook(color)
+        self._positions['a%s' % rank].piece = chess_piece.Rook(color)
+        self._positions['b%s' % rank].piece = chess_piece.Knight(color)
+        self._positions['c%s' % rank].piece = chess_piece.Bishop(color)
+        self._positions['d%s' % rank].piece = chess_piece.Queen(color)
+        self._positions['e%s' % rank].piece = chess_piece.King(color)
+        self._positions['f%s' % rank].piece = chess_piece.Bishop(color)
+        self._positions['g%s' % rank].piece = chess_piece.Knight(color)
+        self._positions['h%s' % rank].piece = chess_piece.Rook(color)
 
     def _setup_minor_pieces(self, rank, color):
         for file in range(ord('a'), ord('h') + 1):
@@ -68,6 +68,21 @@ class Board:
         self._place_piece(position_to, piece)
 
     def _place_piece(self, position, piece):
+        """ Places piece at given position, if a piece is already
+        in the position, it is captured.
+
+        Parameters
+        ----------
+        position : chess.board.Position
+            Position to place the piece on.
+        piece : chess.piece.Piece
+            Chess piece to place at position.
+
+        Returns
+        -------
+        None
+
+        """
         self._positions[str(position)].piece = piece
 
     def _remove_piece(self, position):
@@ -78,12 +93,12 @@ class Board:
 
         Parameters
         ----------
-        position: Position
+        position: chess.board.Position
             Position to get chess piece from.
 
         Returns
         -------
-        chess.board.piece.Piece
+        chess.piece.Piece
             Chess piece if position is occupied, otherwise None.
         """
         return self._positions[str(position)].piece
@@ -103,7 +118,7 @@ class Position:
         Chess board column position, values in a-h
     rank : int
         Chess board row position, values 1-8
-    piece : Piece
+    piece : chess.piece.Piece, optional(default=None)
         Chess piece at position. Defaults to None.
 
     Raises

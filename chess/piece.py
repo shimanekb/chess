@@ -18,7 +18,7 @@ class Piece:
     ----------
     color : chess.piece.Color
         Color of chess piece, which can be White or Black.
-    symbol : str
+    symbol : str, optional(default='NA')
         Display symbol of chess piece. Defaults to NA.
     """
     def __init__(self, color, symbol='NA'):

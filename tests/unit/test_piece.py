@@ -1,7 +1,7 @@
 """
 Unit tests for piece module.
 """
-from chess.board import piece
+from chess import piece
 
 
 def test_str_constructor_white():

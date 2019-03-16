@@ -1,8 +1,10 @@
 """
 Tests for chess.board.board.Board
 """
-from chess.board.board import Board
-from chess.board.board import Position
+import pytest
+from chess.board import Board
+from chess.board import IllegalMoveError
+from chess.board import Position
 
 
 def test_init_default_white_board_setup():
@@ -95,11 +97,11 @@ def test_init_default_black_board_setup():
 
 def test_move_piece_move_piece_is_moved():
     # Given
+    board = Board()
     pos_from = Position('a2')
     pos_to = Position('a3')
 
     # When
-    board = Board()
     board.move_piece(pos_from, pos_to)
 
     # Then
@@ -109,4 +111,32 @@ def test_move_piece_move_piece_is_moved():
 
 
 def test_move_piece_piece_captured_move_to_occupied_position():
-    assert False
+    # Given
+    board = Board()
+
+    # Check current state
+    assert board.get_piece(Position('a2')) is not None
+    assert board.get_piece(Position('a2')).symbol == 'WP'
+    assert board.get_piece(Position('b7')) is not None
+    assert board.get_piece(Position('b7')).symbol == 'BP'
+
+    pos_from_to = [('a2', 'a3'), ('a3', 'a4'), ('a4', 'a5'), ('a5', 'a6'), ('a6', 'b7')]
+
+    # When
+    for pos_from, pos_to in pos_from_to:
+        board.move_piece(Position(pos_from), Position(pos_to))
+
+    # Then
+    assert board.get_piece(Position('b7')) is not None
+    assert board.get_piece(Position('b7')).symbol == 'WP'
+
+
+def test_move_piece_illegal_move_error_raised_move_to_unoccupied_position():
+    with pytest.raises(IllegalMoveError):
+        # Given
+        board = Board()
+
+        # When
+        board.move_piece(Position('a3'), Position('a4'))
+
+        # Then PyUnit verifies error raised

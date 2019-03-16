@@ -2,8 +2,8 @@
 Module for chess.board.board.Position tests.
 """
 import pytest
-from chess.board.board import Position
-from chess.board.piece import Piece
+from chess.board import Position
+from chess.piece import Piece
 
 
 def test_is_occupied_no_piece_unoccupied():
