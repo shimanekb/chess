@@ -2,6 +2,8 @@
 Module for two player game of chess.
 """
 from chess.board import Board
+from chess.board import IllegalMoveError
+from chess.board import Position
 from chess.app.view import board_view
 
 
@@ -18,10 +20,30 @@ def play_game():
     board = Board()
     while True:
         display_board(board)
-        user_input = ask_move()
+        try:
+            user_input = ask_move()
 
-        if user_input.upper() == QUIT:
-            break
+            if user_input.upper() == QUIT:
+                break
+
+            position_from, position_to = _parse_positions(user_input)
+            board.move_piece(position_from, position_to)
+        except ValueError as err:
+            print(err)
+        except IllegalMoveError as err:
+            print(err)
+
+
+def _parse_positions(user_input):
+    positions = user_input.split()
+
+    if len(positions) != 2:
+        raise ValueError('Invalid move, needs two positions')
+
+    position_from = Position(positions[0])
+    position_to = Position(positions[1])
+
+    return position_from, position_to
 
 
 def display_board(board):

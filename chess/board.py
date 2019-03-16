@@ -131,7 +131,7 @@ class Position:
         if not re.match('^[a-hA-H][1-8]$', square):
             raise ValueError('Invalid position format needs to '
                              'be [a-e][1-8]: %s' % square)
-        self.file = square[0]
+        self.file = square[0].lower()
         self.rank = int(square[1])
         self.piece = piece
 

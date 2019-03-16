@@ -8,11 +8,13 @@ from chess.app.controller import game_controller
 @pytest.fixture()
 def feed_input(monkeypatch):
     def _feed_input(fed_input):
-        monkeypatch.setattr('builtins.input', lambda x: fed_input)
+        input_itr = iter(fed_input)
+        monkeypatch.setattr('builtins.input', lambda x: next(input_itr))
 
     return _feed_input
 
 
+@pytest.mark.timeout(3)
 def test_movement(capsys, feed_input):
     # Given
     expected_first_board = \
@@ -54,8 +56,7 @@ def test_movement(capsys, feed_input):
         '  -------------------------------------------------\n' \
         '     a     b     c     d    e     f     g     h'
 
-    feed_input('b2 b3')
-    feed_input('Q')
+    feed_input(['b2 b3', 'q'])
 
     # When
     game_controller.play_game()
@@ -63,16 +64,20 @@ def test_movement(capsys, feed_input):
     # Then
     outerr = capsys.readouterr()
 
-    assert expected_first_board in outerr.out
-    assert expected_second_board in outerr.out
+    actual_board = outerr.out
+    assert expected_first_board in actual_board
+
+    actual_board = outerr.out
+    assert expected_second_board in actual_board
 
 
+@pytest.mark.timeout(3)
 def test_movement_retry_bad_input_not_rank(capsys, feed_input):
     # Given
-    expected_error_prompt = 'Invalid position format needs to be [a-e][1-8]: b9'
+    expected_error_prompt = 'Invalid position format needs to be ' \
+                            '[a-e][1-8]: b9'
 
-    feed_input('b2 b9')
-    feed_input('Q')
+    feed_input(['b2 b9', 'Q'])
 
     # When
     game_controller.play_game()
@@ -83,12 +88,13 @@ def test_movement_retry_bad_input_not_rank(capsys, feed_input):
     assert expected_error_prompt in outerr.out
 
 
+@pytest.mark.timeout(3)
 def test_movement_retry_bad_input_not_file(capsys, feed_input):
     # Given
-    expected_error_prompt = 'Invalid position format needs to be [a-e][1-8]: z2'
+    expected_error_prompt = 'Invalid position format needs to be ' \
+                            '[a-e][1-8]: z2'
 
-    feed_input('z2 b3')
-    feed_input('Q')
+    feed_input(['z2 b3', 'Q'])
 
     # When
     game_controller.play_game()
@@ -99,12 +105,12 @@ def test_movement_retry_bad_input_not_file(capsys, feed_input):
     assert expected_error_prompt in outerr.out
 
 
+@pytest.mark.timeout(3)
 def test_movement_retry_bad_input_no_space(capsys, feed_input):
     # Given
     expected_error_prompt = 'Invalid move, needs two positions'
 
-    feed_input('z2 b3')
-    feed_input('Q')
+    feed_input(['z2b3', 'Q'])
 
     # When
     game_controller.play_game()
@@ -115,6 +121,7 @@ def test_movement_retry_bad_input_no_space(capsys, feed_input):
     assert expected_error_prompt in outerr.out
 
 
+@pytest.mark.timeout(3)
 def test_capture(capsys, feed_input):
     # Given
     expected_first_board = \
@@ -156,12 +163,7 @@ def test_capture(capsys, feed_input):
         '  -------------------------------------------------\n'\
         '     a     b     c     d    e     f     g     h'
 
-    feed_input('a2 a3')
-    feed_input('b7 b6')
-    feed_input('a3 a4')
-    feed_input('b6 b5')
-    feed_input('a5 b5')
-    feed_input('Q')
+    feed_input(['a2 a3', 'b7 b6', 'a3 a4', 'b6 b5', 'a4 b5', 'q'])
 
     # When
     game_controller.play_game()
@@ -176,7 +178,7 @@ def test_capture(capsys, feed_input):
 @pytest.mark.timeout(1)
 def test_quit(feed_input):
     # Given
-    feed_input('Q')
+    feed_input(['Q'])
 
     # When
     game_controller.play_game()
