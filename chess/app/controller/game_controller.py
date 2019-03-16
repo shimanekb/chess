@@ -22,10 +22,10 @@ def play_game():
     while not quit_game:
         print('')
         display_board(board)
-        print('')
 
         while True:
             try:
+                print('')
                 user_input = ask_move()
 
                 if user_input.upper() == QUIT:
