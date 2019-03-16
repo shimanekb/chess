@@ -7,5 +7,9 @@ setup(name='Chess',
       description='Chess game',
       author='Brandon Shimanek',
       url='Na',
-      packages=[],
+      packages=['chess', 'chess.app', 'chess.app.controller',
+                'chess.app.view'],
+      entry_points={
+            'console_scripts': ['chess = chess.app.__main__:main']
+          }
       )

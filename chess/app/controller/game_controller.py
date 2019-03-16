@@ -19,8 +19,10 @@ def play_game():
     """
     board = Board()
     while True:
-        display_board(board)
         try:
+            print('')
+            display_board(board)
+            print('')
             user_input = ask_move()
 
             if user_input.upper() == QUIT:
@@ -69,7 +71,7 @@ def ask_move():
     str
         User movement input.
     """
-    user_input = input('Make a move(ex. b2 b3) or Q to quit:')
+    user_input = input('Make a move(ex. b2 b3) or Q to quit: ')
     return user_input
 
 
