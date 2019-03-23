@@ -1,15 +1,20 @@
-#!/usr/bin/env python
+from setuptools import setup
 
-from distutils.core import setup
-
-setup(name='Chess',
-      version='1.0',
-      description='Chess game',
+setup(name='chess-cli-bshio',
+      version='0.0.1',
       author='Brandon Shimanek',
-      url='Na',
+      author_email='brandon.j.shimanek@gmail.com',
+      description='Cli game of chess',
+      long_description='Cli game of chess',
+      url='https://github.com/shimanekb/chess',
       packages=['chess', 'chess.app', 'chess.app.controller',
                 'chess.app.view'],
       entry_points={
             'console_scripts': ['chess = chess.app.__main__:main']
-          }
+          },
+      classifiers=[
+          "Programming Language :: Python :: 3",
+          "License :: OSI Approved :: Apache Software License",
+          "Operating System :: OS Independent",
+          ],
       )

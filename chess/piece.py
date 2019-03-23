@@ -22,11 +22,11 @@ class Piece:
         Display symbol of chess piece. Defaults to NA.
     """
     def __init__(self, color, symbol='NA'):
-        self.symbol = color.value + symbol
+        self.symbol = symbol
         self.color = color
 
     def __str__(self):
-        return self.symbol
+        return self.color.value + self.symbol
 
 
 class Pawn(Piece):
