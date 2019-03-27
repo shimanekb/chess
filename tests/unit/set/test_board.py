@@ -2,9 +2,9 @@
 Tests for chess.board.board.Board
 """
 import pytest
-from chess.board import Board
-from chess.board import IllegalMoveError
-from chess.board import Position
+from chess.set.table import Board
+from chess.set.table import IllegalMoveError
+from chess.set.table import Position
 
 
 def test_init_default_white_board_setup():
@@ -14,41 +14,41 @@ def test_init_default_white_board_setup():
     # Then
     pos = Position('a1')
     white_rook_left = board.get_piece(pos)
-    assert white_rook_left.symbol == 'WR'
+    assert str(white_rook_left) == 'WR'
 
     pos = Position('b1')
     white_knight_left = board.get_piece(pos)
-    assert white_knight_left.symbol == 'WK'
+    assert str(white_knight_left) == 'WK'
 
     pos = Position('c1')
     white_bishop_left = board.get_piece(pos)
-    assert white_bishop_left.symbol == 'WB'
+    assert str(white_bishop_left) == 'WB'
 
     pos = Position('d1')
     white_queen = board.get_piece(pos)
-    assert white_queen.symbol == 'WQ'
+    assert str(white_queen) == 'WQ'
 
     pos = Position('e1')
     white_king = board.get_piece(pos)
-    assert white_king.symbol == 'WKi'
+    assert str(white_king) == 'WKi'
 
     pos = Position('f1')
     white_bishop_right = board.get_piece(pos)
-    assert white_bishop_right.symbol == 'WB'
+    assert str(white_bishop_right) == 'WB'
 
     pos = Position('g1')
     white_knight_right = board.get_piece(pos)
-    assert white_knight_right.symbol == 'WK'
+    assert str(white_knight_right) == 'WK'
 
     pos = Position('h1')
     white_rook_right = board.get_piece(pos)
-    assert white_rook_right.symbol == 'WR'
+    assert str(white_rook_right) == 'WR'
 
     for x in range(ord('a'), ord('h') + 1):
         square = '%s2' % chr(x)
         pos = Position(square)
         white_pawn = board.get_piece(pos)
-        assert white_pawn.symbol == 'WP'
+        assert str(white_pawn) == 'WP'
 
 
 def test_init_default_black_board_setup():
@@ -58,41 +58,41 @@ def test_init_default_black_board_setup():
     # Then
     pos = Position('a8')
     black_rook_left = board.get_piece(pos)
-    assert black_rook_left.symbol == 'BR'
+    assert str(black_rook_left) == 'BR'
 
     pos = Position('b8')
     black_knight_left = board.get_piece(pos)
-    assert black_knight_left.symbol == 'BK'
+    assert str(black_knight_left) == 'BK'
 
     pos = Position('c8')
     black_bishop_left = board.get_piece(pos)
-    assert black_bishop_left.symbol == 'BB'
+    assert str(black_bishop_left) == 'BB'
 
     pos = Position('d8')
     black_queen = board.get_piece(pos)
-    assert black_queen.symbol == 'BQ'
+    assert str(black_queen) == 'BQ'
 
     pos = Position('e8')
     black_king = board.get_piece(pos)
-    assert black_king.symbol == 'BKi'
+    assert str(black_king) == 'BKi'
 
     pos = Position('f8')
     black_bishop_right = board.get_piece(pos)
-    assert black_bishop_right.symbol == 'BB'
+    assert str(black_bishop_right) == 'BB'
 
     pos = Position('g8')
     black_knight_right = board.get_piece(pos)
-    assert black_knight_right.symbol == 'BK'
+    assert str(black_knight_right) == 'BK'
 
     pos = Position('h8')
     black_rook_right = board.get_piece(pos)
-    assert black_rook_right.symbol == 'BR'
+    assert str(black_rook_right) == 'BR'
 
     for x in range(ord('a'), ord('h') + 1):
         square = '%s7' % chr(x)
         pos = Position(square)
         black_pawn = board.get_piece(pos)
-        assert black_pawn.symbol == 'BP'
+        assert str(black_pawn) == 'BP'
 
 
 def test_move_piece_move_piece_is_moved():
@@ -107,7 +107,7 @@ def test_move_piece_move_piece_is_moved():
     # Then
     assert board.get_piece(pos_from) is None
     assert board.get_piece(pos_to) is not None
-    assert board.get_piece(pos_to).symbol == 'WP'
+    assert str(board.get_piece(pos_to)) == 'WP'
 
 
 def test_move_piece_piece_captured_move_to_occupied_position():
@@ -116,9 +116,9 @@ def test_move_piece_piece_captured_move_to_occupied_position():
 
     # Check current state
     assert board.get_piece(Position('a2')) is not None
-    assert board.get_piece(Position('a2')).symbol == 'WP'
+    assert str(board.get_piece(Position('a2'))) == 'WP'
     assert board.get_piece(Position('b7')) is not None
-    assert board.get_piece(Position('b7')).symbol == 'BP'
+    assert str(board.get_piece(Position('b7'))) == 'BP'
 
     pos_from_to = [('a2', 'a3'), ('a3', 'a4'), ('a4', 'a5'),
                    ('a5', 'a6'), ('a6', 'b7')]
@@ -129,7 +129,7 @@ def test_move_piece_piece_captured_move_to_occupied_position():
 
     # Then
     assert board.get_piece(Position('b7')) is not None
-    assert board.get_piece(Position('b7')).symbol == 'WP'
+    assert str(board.get_piece(Position('b7'))) == 'WP'
 
 
 def test_move_piece_illegal_move_error_raised_move_to_unoccupied_position():

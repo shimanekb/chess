@@ -1,8 +1,8 @@
 """
-Module for chess board related classes and functions.
+Module for chess table items (board ...)
 """
 import re
-from chess import piece as chess_piece
+from chess.set import box as chess_piece
 
 
 class Board:
@@ -45,9 +45,9 @@ class Board:
 
         Parameters
         ----------
-        position_from : chess.board.Position
+        position_from : chess.table.Position
             Position to move piece from.
-        position_to : chess.board.Position
+        position_to : chess.table.Position
             Position to move piece to.
 
         Returns
@@ -73,9 +73,9 @@ class Board:
 
         Parameters
         ----------
-        position : chess.board.Position
+        position : chess.table.Position
             Position to place the piece on.
-        piece : chess.piece.Piece
+        piece : chess.box.Piece
             Chess piece to place at position.
 
         Returns
@@ -93,12 +93,12 @@ class Board:
 
         Parameters
         ----------
-        position: chess.board.Position
+        position: chess.table.Position
             Position to get chess piece from.
 
         Returns
         -------
-        chess.piece.Piece
+        chess.box.Piece
             Chess piece if position is occupied, otherwise None.
         """
         return self._positions[str(position)].piece

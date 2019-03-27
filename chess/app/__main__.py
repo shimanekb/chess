@@ -1,7 +1,7 @@
 """
 Main module for chess game
 """
-from chess.app.controller import game_controller
+from chess.app import game_controller
 
 
 def main():

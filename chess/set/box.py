@@ -1,5 +1,5 @@
 """
-Module for chess piece functionality.
+Module of chess box items (pieces ...)
 """
 from enum import Enum
 
@@ -16,7 +16,7 @@ class Piece:
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     symbol : str, optional(default='NA')
         Display symbol of chess piece. Defaults to NA.
@@ -34,7 +34,7 @@ class Pawn(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='P'):
@@ -46,7 +46,7 @@ class Rook(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='R'):
@@ -58,7 +58,7 @@ class Knight(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='K'):
@@ -70,7 +70,7 @@ class Bishop(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='B'):
@@ -82,7 +82,7 @@ class Queen(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='Q'):
@@ -94,7 +94,7 @@ class King(Piece):
 
     Attributes
     ----------
-    color : chess.piece.Color
+    color : chess.box.Color
         Color of chess piece, which can be White or Black.
     """
     def __init__(self, color, symbol='Ki'):

@@ -1,11 +1,10 @@
 """
 Module for two player game of chess.
 """
-from chess.board import Board
-from chess.board import IllegalMoveError
-from chess.board import Position
-from chess.app.view import board_view
-
+from chess.set.table import Board
+from chess.set.table import IllegalMoveError
+from chess.set.table import Position
+from chess.app import board_view
 
 QUIT = 'Q'
 
@@ -58,7 +57,7 @@ def display_board(board):
 
     Parameters
     ----------
-    board : chess.board.Board
+    board : chess.table.Board
         Board to display.
 
     Returns

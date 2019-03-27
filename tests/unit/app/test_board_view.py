@@ -1,8 +1,8 @@
 """
 Unit tests for board_view
 """
-from chess.board import Board
-from chess.app.view import board_view
+from chess.set.table import Board
+from chess.app import board_view
 
 
 def test_display_printed_board(capsys):

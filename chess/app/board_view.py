@@ -1,7 +1,7 @@
 """
 Module for board related views.
 """
-from chess.board import Position
+from chess.set.table import Position
 
 
 def display(board):
@@ -9,7 +9,7 @@ def display(board):
 
     Parameters
     ----------
-    board : chess.board.Board
+    board : chess.table.Board
         Board to display
 
     Returns
@@ -31,7 +31,7 @@ def _build_rank_str(board, rank):
 
     Parameters
     ----------
-    board : chess.board.Board
+    board : chess.table.Board
         Board to display
     rank : int
         Rank to build string for.
@@ -48,7 +48,7 @@ def _build_rank_str(board, rank):
         if piece is None:
             rank_str += '     '
         else:
-            rank_str += '{:^5}'.format(piece.symbol)
+            rank_str += '{:^5}'.format(str(piece))
 
         rank_str += '|'
 

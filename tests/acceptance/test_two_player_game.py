@@ -2,7 +2,7 @@
 Acceptance tests for two player game of chess.
 """
 import pytest
-from chess.app.controller import game_controller
+from chess.app import game_controller
 
 
 @pytest.fixture()

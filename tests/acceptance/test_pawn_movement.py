@@ -2,10 +2,10 @@
 Acceptance tests for pawn movement.
 """
 import pytest
-from chess.board import IllegalMoveError
-from chess.board import Board
-from chess.board import Position
-from chess.piece import Color
+from chess.set.table import IllegalMoveError
+from chess.set.table import Board
+from chess.set.table import Position
+from chess.set.box import Color
 
 
 def test_move_pawn_by_one_valid_movement():
