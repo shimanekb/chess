@@ -2,7 +2,7 @@
 Module for chess table items (board ...)
 """
 import re
-from chess.set import box as chess_piece
+from chess.set import box
 
 
 class Board:
@@ -17,27 +17,27 @@ class Board:
                 self._positions[square] = Position(square)
 
         # Setup white
-        self._setup_major_pieces(1, chess_piece.Color.WHITE)
-        self._setup_minor_pieces(2, chess_piece.Color.WHITE)
+        self._setup_major_pieces(1, box.Color.WHITE)
+        self._setup_minor_pieces(2, box.Color.WHITE)
 
         # Setup black
-        self._setup_major_pieces(8, chess_piece.Color.BLACK)
-        self._setup_minor_pieces(7, chess_piece.Color.BLACK)
+        self._setup_major_pieces(8, box.Color.BLACK)
+        self._setup_minor_pieces(7, box.Color.BLACK)
 
     def _setup_major_pieces(self, rank, color):
-        self._positions['a%s' % rank].piece = chess_piece.Rook(color)
-        self._positions['b%s' % rank].piece = chess_piece.Knight(color)
-        self._positions['c%s' % rank].piece = chess_piece.Bishop(color)
-        self._positions['d%s' % rank].piece = chess_piece.Queen(color)
-        self._positions['e%s' % rank].piece = chess_piece.King(color)
-        self._positions['f%s' % rank].piece = chess_piece.Bishop(color)
-        self._positions['g%s' % rank].piece = chess_piece.Knight(color)
-        self._positions['h%s' % rank].piece = chess_piece.Rook(color)
+        self._positions['a%s' % rank].piece = box.Rook(color)
+        self._positions['b%s' % rank].piece = box.Knight(color)
+        self._positions['c%s' % rank].piece = box.Bishop(color)
+        self._positions['d%s' % rank].piece = box.Queen(color)
+        self._positions['e%s' % rank].piece = box.King(color)
+        self._positions['f%s' % rank].piece = box.Bishop(color)
+        self._positions['g%s' % rank].piece = box.Knight(color)
+        self._positions['h%s' % rank].piece = box.Rook(color)
 
     def _setup_minor_pieces(self, rank, color):
         for file in range(ord('a'), ord('h') + 1):
             square = '%s%s' % (chr(file), rank)
-            self._positions[square].piece = chess_piece.Pawn(color)
+            self._positions[square].piece = box.Pawn(color)
 
     def move_piece(self, position_from, position_to):
         """Moves piece from one position to another. Capturing a piece occupied
@@ -45,9 +45,9 @@ class Board:
 
         Parameters
         ----------
-        position_from : chess.table.Position
+        position_from : chess.set.table.Position
             Position to move piece from.
-        position_to : chess.table.Position
+        position_to : chess.set.table.Position
             Position to move piece to.
 
         Returns
@@ -73,9 +73,9 @@ class Board:
 
         Parameters
         ----------
-        position : chess.table.Position
+        position : chess.set.table.Position
             Position to place the piece on.
-        piece : chess.box.Piece
+        piece : chess.set.box.Piece
             Chess piece to place at position.
 
         Returns
@@ -93,7 +93,7 @@ class Board:
 
         Parameters
         ----------
-        position: chess.table.Position
+        position: chess.set.table.Position
             Position to get chess piece from.
 
         Returns
@@ -118,7 +118,7 @@ class Position:
         Chess board column position, values in a-h
     rank : int
         Chess board row position, values 1-8
-    piece : chess.piece.Piece, optional(default=None)
+    piece : chess.set.box.Piece, optional(default=None)
         Chess piece at position. Defaults to None.
 
     Raises
@@ -147,6 +147,58 @@ class Position:
 
     def __str__(self):
         return '%s%s' % (self.file, self.rank)
+
+
+class PawnMovementSpecification:
+    """Movement specification for valid pawn movements.
+    """
+
+    def is_valid(self, piece, position_from, position_to):
+        """
+
+        Parameters
+        ----------
+        piece : chess.set.box.Piece
+            Chess piece to validate move for.
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+        """
+        if type(piece) is box.Pawn:
+            return self._is_valid_forward_movement(piece, position_from, position_to) \
+                   or self._is_valid_forward_by_two_movement(piece, position_from, position_to)
+        else:
+            return False
+
+    def _is_same_file(self, position_from, position_to):
+        return position_to.piece is None and position_from.file == position_to.file
+
+    def _is_rank_distant_by(self, position_from, position_to, distance):
+        rank_distance = position_to.rank - position_from.rank
+
+        return rank_distance == distance
+
+    def _is_forward_distant_by(self, position_from, position_to, distance):
+        return self._is_same_file(position_from, position_to) and self._is_rank_distant_by(position_from,
+                                                                                           position_to, distance)
+
+    def _is_valid_forward_movement(self, piece, position_from, position_to):
+        if piece.color is box.Color.WHITE:
+            return self._is_forward_distant_by(position_from, position_to, 1)
+        else:
+            return self._is_forward_distant_by(position_from, position_to, -1)
+
+    def _is_valid_forward_by_two_movement(self, piece, position_from, position_to):
+        if piece.color is box.Color.WHITE:
+            return not piece.been_moved and self._is_forward_distant_by(position_from, position_to, 2)
+        else:
+            return not piece.been_moved and self._is_forward_distant_by(position_from, position_to, -2)
 
 
 class ChessError(Exception):

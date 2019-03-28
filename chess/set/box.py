@@ -20,10 +20,13 @@ class Piece:
         Color of chess piece, which can be White or Black.
     symbol : str, optional(default='NA')
         Display symbol of chess piece. Defaults to NA.
+    been_moved : bool
+        Has piece been moved. Defaults to False.
     """
-    def __init__(self, color, symbol='NA'):
+    def __init__(self, color, symbol='NA', been_moved=False):
         self.symbol = symbol
         self.color = color
+        self.been_moved = been_moved
 
     def __str__(self):
         return self.color.value + self.symbol
