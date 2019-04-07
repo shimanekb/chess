@@ -171,13 +171,17 @@ class PawnMovementSpecification:
             If move is valid.
         """
         if type(piece) is box.Pawn:
-            return self._is_valid_forward_movement(piece, position_from, position_to) \
-                   or self._is_valid_forward_by_two_movement(piece, position_from, position_to)
+            return self._is_valid_forward_movement(piece, position_from,
+                                                   position_to) \
+                   or self._is_valid_forward_by_two_movement(piece,
+                                                             position_from,
+                                                             position_to)
         else:
             return False
 
     def _is_same_file(self, position_from, position_to):
-        return position_to.piece is None and position_from.file == position_to.file
+        return position_to.piece is None \
+               and position_from.file == position_to.file
 
     def _is_rank_distant_by(self, position_from, position_to, distance):
         rank_distance = position_to.rank - position_from.rank
@@ -185,8 +189,9 @@ class PawnMovementSpecification:
         return rank_distance == distance
 
     def _is_forward_distant_by(self, position_from, position_to, distance):
-        return self._is_same_file(position_from, position_to) and self._is_rank_distant_by(position_from,
-                                                                                           position_to, distance)
+        return self._is_same_file(position_from, position_to) \
+               and self._is_rank_distant_by(position_from,
+                                            position_to, distance)
 
     def _is_valid_forward_movement(self, piece, position_from, position_to):
         if piece.color is box.Color.WHITE:
@@ -194,11 +199,16 @@ class PawnMovementSpecification:
         else:
             return self._is_forward_distant_by(position_from, position_to, -1)
 
-    def _is_valid_forward_by_two_movement(self, piece, position_from, position_to):
+    def _is_valid_forward_by_two_movement(self, piece, position_from,
+                                          position_to):
         if piece.color is box.Color.WHITE:
-            return not piece.been_moved and self._is_forward_distant_by(position_from, position_to, 2)
+            return not piece.been_moved \
+                   and self._is_forward_distant_by(position_from,
+                                                   position_to, 2)
         else:
-            return not piece.been_moved and self._is_forward_distant_by(position_from, position_to, -2)
+            return not piece.been_moved \
+                   and self._is_forward_distant_by(position_from,
+                                                   position_to, -2)
 
 
 class ChessError(Exception):
