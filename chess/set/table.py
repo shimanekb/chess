@@ -153,13 +153,11 @@ class PawnMovementSpecification:
     """Movement specification for valid pawn movements.
     """
 
-    def is_valid(self, piece, position_from, position_to):
+    def is_satisfied_by(self, position_from, position_to):
         """
 
         Parameters
         ----------
-        piece : chess.set.box.Piece
-            Chess piece to validate move for.
         position_from : chess.set.table.Position
             Position to move piece from.
         position_to : chess.set.table.Position
@@ -170,12 +168,10 @@ class PawnMovementSpecification:
         bool
             If move is valid.
         """
+        piece = position_from.piece
         if type(piece) is box.Pawn:
-            return self._is_valid_forward_movement(piece, position_from,
-                                                   position_to) \
-                   or self._is_valid_forward_by_two_movement(piece,
-                                                             position_from,
-                                                             position_to)
+            return self._is_valid_forward_movement(position_from,
+                                                   position_to)
         else:
             return False
 
@@ -193,22 +189,12 @@ class PawnMovementSpecification:
                and self._is_rank_distant_by(position_from,
                                             position_to, distance)
 
-    def _is_valid_forward_movement(self, piece, position_from, position_to):
+    def _is_valid_forward_movement(self, position_from, position_to):
+        piece = position_from.piece
         if piece.color is box.Color.WHITE:
             return self._is_forward_distant_by(position_from, position_to, 1)
         else:
             return self._is_forward_distant_by(position_from, position_to, -1)
-
-    def _is_valid_forward_by_two_movement(self, piece, position_from,
-                                          position_to):
-        if piece.color is box.Color.WHITE:
-            return not piece.been_moved \
-                   and self._is_forward_distant_by(position_from,
-                                                   position_to, 2)
-        else:
-            return not piece.been_moved \
-                   and self._is_forward_distant_by(position_from,
-                                                   position_to, -2)
 
 
 class ChessError(Exception):

@@ -7,8 +7,7 @@ setup(name='chess-cli-bshio',
       description='Cli game of chess',
       long_description='Cli game of chess',
       url='https://github.com/shimanekb/chess',
-      packages=['chess', 'chess.app', 'chess.app.controller',
-                'chess.app.view'],
+      packages=['chess.set', 'chess.app'],
       entry_points={
             'console_scripts': ['chess = chess.app.__main__:main']
           },
