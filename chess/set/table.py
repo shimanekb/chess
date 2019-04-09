@@ -169,32 +169,27 @@ class PawnMovementSpecification:
             If move is valid.
         """
         piece = position_from.piece
-        if type(piece) is box.Pawn:
+        if piece is not None:
             return self._is_valid_forward_movement(position_from,
                                                    position_to)
         else:
             return False
 
-    def _is_same_file(self, position_from, position_to):
-        return position_to.piece is None \
-               and position_from.file == position_to.file
+    def _rank_distance(self, position_from, position_to):
+        return position_to.rank - position_from.rank
 
-    def _is_rank_distant_by(self, position_from, position_to, distance):
-        rank_distance = position_to.rank - position_from.rank
-
-        return rank_distance == distance
-
-    def _is_forward_distant_by(self, position_from, position_to, distance):
-        return self._is_same_file(position_from, position_to) \
-               and self._is_rank_distant_by(position_from,
-                                            position_to, distance)
+    def _file_distance(self, position_from, position_to):
+        return ord(position_to.file) - ord(position_from.file)
 
     def _is_valid_forward_movement(self, position_from, position_to):
+        file_distance = self._file_distance(position_from, position_to)
+        rank_distance = self._rank_distance(position_from, position_to)
         piece = position_from.piece
+
         if piece.color is box.Color.WHITE:
-            return self._is_forward_distant_by(position_from, position_to, 1)
+            return file_distance == 0 and rank_distance > 0
         else:
-            return self._is_forward_distant_by(position_from, position_to, -1)
+            return file_distance == 0 and rank_distance < 0
 
 
 class ChessError(Exception):

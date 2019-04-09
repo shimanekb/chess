@@ -5,7 +5,7 @@ from chess.set.table import Board
 from chess.set.table import Position
 
 
-def test_move_pawn_by_one_valid_movement():
+def test_move_pawn_forward_valid_movement():
     # Given
     board = Board()
     pawn_position_from = Position('a2')
