@@ -71,3 +71,16 @@ def test_is_satisfied_by_black_pawn_move_by_one_backwards_false():
         position_from, position_to)
 
     assert is_satisfied_by_move is False
+
+
+def test_is_satisfied_by_white_pawn_diagonal_true():
+    movement_specification = PawnMovementSpecification()
+    pawn = Pawn(Color.WHITE)
+
+    position_from = Position('a6', piece=pawn)
+    position_to = Position('b7')
+
+    is_satisfied_by_move = movement_specification.is_satisfied_by(
+        position_from, position_to)
+
+    assert is_satisfied_by_move is True

@@ -68,7 +68,7 @@ def test_move_black_pawn_diagonal_capture_valid_movement():
     board = Board()
     board.move_piece(Position('a2'), Position('a4'))
     board.move_piece(Position('b7'), Position('b5'))
-    board.move_piece(Position('a2'), Position('a3'))
+    board.move_piece(Position('b2'), Position('b3'))
 
     pawn_position_from = Position('b5')
     pawn_position_to = Position('a4')

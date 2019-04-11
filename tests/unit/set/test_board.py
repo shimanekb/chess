@@ -120,16 +120,16 @@ def test_move_piece_piece_captured_move_to_occupied_position():
     assert board.get_piece(Position('b7')) is not None
     assert str(board.get_piece(Position('b7'))) == 'BP'
 
-    pos_from_to = [('a2', 'a3'), ('a3', 'a4'), ('a4', 'a5'),
-                   ('a5', 'a6'), ('a6', 'b7')]
+    pos_from_to = [('a2', 'a3'), ('b7', 'b6'), ('a3', 'a4'),
+                   ('b6', 'b5'), ('a4', 'b5')]
 
     # When
     for pos_from, pos_to in pos_from_to:
         board.move_piece(Position(pos_from), Position(pos_to))
 
     # Then
-    assert board.get_piece(Position('b7')) is not None
-    assert str(board.get_piece(Position('b7'))) == 'WP'
+    assert board.get_piece(Position('b5')) is not None
+    assert str(board.get_piece(Position('b5'))) == 'WP'
 
 
 def test_move_piece_illegal_move_error_raised_move_to_unoccupied_position():

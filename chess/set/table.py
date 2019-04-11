@@ -16,7 +16,7 @@ class Board:
                 square = '%s%s' % (chr(file), rank)
                 self._positions[square] = Position(square)
 
-        self._movement_specs = {'P': PawnMovementSpecification()}
+        self._piece_movement_specification = PieceMovementSpecification()
 
         # Setup white
         self._setup_major_pieces(1, box.Color.WHITE)
@@ -65,12 +65,11 @@ class Board:
         board_position_from = self._positions[str(position_from)]
         board_position_to = self._positions[str(position_to)]
 
-        if piece is None:
-            raise IllegalMoveError('No piece to move at %s'
-                                   % str(position_from))
-        if not self._movement_specs[piece.symbol].is_satisfied_by(
-                board_position_from, board_position_to):
-            raise IllegalMoveError('Illegal move for piece %s' % str(piece))
+        if not self._piece_movement_specification\
+                .is_satisfied_by(board_position_from, board_position_to):
+            raise IllegalMoveError('%s to %s is an illegal move!'
+                                   % (str(board_position_from),
+                                      str(board_position_to)))
 
         self._remove_piece(position_from)
         self._place_piece(position_to, piece)
@@ -155,6 +154,21 @@ class Position:
 
     def __str__(self):
         return '%s%s' % (self.file, self.rank)
+
+
+class PieceMovementSpecification:
+
+    def __init__(self):
+        self._movement_specs = {'P': PawnMovementSpecification()}
+
+    def is_satisfied_by(self, position_from, position_to):
+        piece = position_from.piece
+
+        if piece is None or piece.symbol not in self._movement_specs:
+            return False
+
+        specification = self._movement_specs[piece.symbol]
+        return specification.is_satisfied_by(position_from, position_to)
 
 
 class MovementCompositeSpecification:
@@ -250,10 +264,13 @@ class OrMovementSpecification(MovementCompositeSpecification):
         bool
             If move is valid.
         """
-        return self.movement_specification_one.is_satisified_by(
-            position_from, position_to) \
-            or self.movement_specification_two.is_satisfied_by(
-            position_from, position_to)
+        left_result = self.movement_specification_one\
+            .is_satisfied_by(position_from, position_to)
+
+        right_result = self.movement_specification_two \
+            .is_satisfied_by(position_from, position_to)
+
+        return left_result or right_result
 
 
 class AndMovementSpecification(MovementCompositeSpecification):
@@ -290,6 +307,37 @@ class AndMovementSpecification(MovementCompositeSpecification):
             position_from, position_to) \
             and self.movement_specification_two.is_satisfied_by(
             position_from, position_to)
+
+
+class DiagonalMovementSpecification(MovementCompositeSpecification):
+    """Specification for diagonal piece movement."""
+
+    def is_satisfied_by(self, position_from, position_to):
+        """Is piece moving diagonal.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+        """
+        piece = position_from.piece
+        if piece is not None:
+            return self._is_move_diagonal(position_from, position_to)
+        else:
+            return False
+
+    def _is_move_diagonal(self, position_from, position_to):
+        file_distance = self.file_distance(position_from, position_to)
+        rank_distance = self.rank_distance(position_from, position_to)
+
+        return abs(file_distance) > 0 and rank_distance == file_distance
 
 
 class ForwardMovementSpecification(MovementCompositeSpecification):
@@ -348,8 +396,9 @@ class PawnMovementSpecification(MovementCompositeSpecification):
         """
         piece = position_from.piece
         if piece is not None and piece.symbol == 'P':
-            return ForwardMovementSpecification()\
-                .is_satisfied_by(position_from, position_to)
+            specification = ForwardMovementSpecification()\
+                .__or__(DiagonalMovementSpecification())
+            return specification.is_satisfied_by(position_from, position_to)
         else:
             return False
 
