@@ -292,12 +292,11 @@ class AndMovementSpecification(MovementCompositeSpecification):
             position_from, position_to)
 
 
-class PawnMovementSpecification:
-    """Movement specification for valid pawn movements.
-    """
+class ForwardMovementSpecification(MovementCompositeSpecification):
+    """Specification for forward piece movement."""
 
     def is_satisfied_by(self, position_from, position_to):
-        """
+        """Is piece moving forward.
 
         Parameters
         ----------
@@ -313,26 +312,45 @@ class PawnMovementSpecification:
         """
         piece = position_from.piece
         if piece is not None:
-            return self._is_valid_forward_movement(position_from,
-                                                   position_to)
+            return self._is_movement_forward(position_from, position_to)
         else:
             return False
 
-    def _rank_distance(self, position_from, position_to):
-        return position_to.rank - position_from.rank
-
-    def _file_distance(self, position_from, position_to):
-        return ord(position_to.file) - ord(position_from.file)
-
-    def _is_valid_forward_movement(self, position_from, position_to):
-        file_distance = self._file_distance(position_from, position_to)
-        rank_distance = self._rank_distance(position_from, position_to)
+    def _is_movement_forward(self, position_from, position_to):
+        file_distance = self.file_distance(position_from, position_to)
+        rank_distance = self.rank_distance(position_from, position_to)
         piece = position_from.piece
 
         if piece.color is box.Color.WHITE:
             return file_distance == 0 and rank_distance > 0
         else:
             return file_distance == 0 and rank_distance < 0
+
+
+class PawnMovementSpecification(MovementCompositeSpecification):
+    """Movement specification for valid pawn movements.
+    """
+
+    def is_satisfied_by(self, position_from, position_to):
+        """Is valid pawn move.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+        """
+        piece = position_from.piece
+        if piece is not None and piece.symbol == 'P':
+            return ForwardMovementSpecification().is_satisfied_by(position_from, position_to)
+        else:
+            return False
 
 
 class ChessError(Exception):
