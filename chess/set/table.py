@@ -16,6 +16,8 @@ class Board:
                 square = '%s%s' % (chr(file), rank)
                 self._positions[square] = Position(square)
 
+        self._movement_specs = {'P': PawnMovementSpecification()}
+
         # Setup white
         self._setup_major_pieces(1, box.Color.WHITE)
         self._setup_minor_pieces(2, box.Color.WHITE)
@@ -60,10 +62,16 @@ class Board:
             Raised when piece move is illegal.
         """
         piece = self.get_piece(position_from)
+        board_position_from = self._positions[str(position_from)]
+        board_position_to = self._positions[str(position_to)]
 
         if piece is None:
             raise IllegalMoveError('No piece to move at %s'
                                    % str(position_from))
+        if not self._movement_specs[piece.symbol].is_satisfied_by(
+                board_position_from, board_position_to):
+            raise IllegalMoveError('Illegal move for piece %s' % str(piece))
+
         self._remove_piece(position_from)
         self._place_piece(position_to, piece)
 
@@ -147,6 +155,141 @@ class Position:
 
     def __str__(self):
         return '%s%s' % (self.file, self.rank)
+
+
+class MovementCompositeSpecification:
+
+    def is_satisfied_by(self, position_from, position_to):
+        """Is the position change a valid move.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+
+        """
+        raise NotImplementedError()
+
+    def __and__(self, movement_specification):
+        return AndMovementSpecification(self, movement_specification)
+
+    def __or__(self, movement_specification):
+        return OrMovementSpecification(self, movement_specification)
+
+    @staticmethod
+    def rank_distance(position_from, position_to):
+        """Calculates position distance between ranks.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        int
+            Distance in positions between ranks.
+
+        """
+        return position_to.rank - position_from.rank
+
+    @staticmethod
+    def file_distance(position_from, position_to):
+        """Calculates distance between files (ordinal).
+
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        int
+            Ordinal distance in positions between files.
+        """
+        return ord(position_to.file) - ord(position_from.file)
+
+
+class OrMovementSpecification(MovementCompositeSpecification):
+    """Combines two MovementSpecifications logically by Or.
+
+    Attributes
+    ----------
+    movement_specification_one: MovementCompositeSpecification
+        Movement specification one (left) to combine
+    movement_specification_two: MovementCompositeSpecification
+        Movement specification two (right) to combine
+    """
+
+    def __init__(self, movement_specification_one, movement_specification_two):
+        self.movement_specification_one = movement_specification_one
+        self.movement_specification_two = movement_specification_two
+
+    def is_satisfied_by(self, position_from, position_to):
+        """Is the position change a valid move.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+        """
+        return self.movement_specification_one.is_satisified_by(
+            position_from, position_to) \
+            or self.movement_specification_two.is_satisfied_by(
+            position_from, position_to)
+
+
+class AndMovementSpecification(MovementCompositeSpecification):
+    """Combines two MovementSpecifications logically by And.
+
+    Attributes
+    ----------
+    movement_specification_one: MovementCompositeSpecification
+        Movement specification one (left) to combine
+    movement_specification_two: MovementCompositeSpecification
+        Movement specification two (right) to combine
+    """
+
+    def __init__(self, movement_specification_one, movement_specification_two):
+        self.movement_specification_one = movement_specification_one
+        self.movement_specification_two = movement_specification_two
+
+    def is_satisfied_by(self, position_from, position_to):
+        """Is the position change a valid move.
+
+        Parameters
+        ----------
+        position_from : chess.set.table.Position
+            Position to move piece from.
+        position_to : chess.set.table.Position
+            Position to move piece to.
+
+        Returns
+        -------
+        bool
+            If move is valid.
+        """
+        return self.movement_specification_one.is_satisified_by(
+            position_from, position_to) \
+            and self.movement_specification_two.is_satisfied_by(
+            position_from, position_to)
 
 
 class PawnMovementSpecification:
