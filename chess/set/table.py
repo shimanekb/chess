@@ -397,7 +397,7 @@ class PawnMovementSpecification(MovementCompositeSpecification):
         piece = position_from.piece
         if piece is not None and piece.symbol == 'P':
             specification = ForwardMovementSpecification()\
-                .__or__(DiagonalMovementSpecification())
+                | (DiagonalMovementSpecification())
             return specification.is_satisfied_by(position_from, position_to)
         else:
             return False
